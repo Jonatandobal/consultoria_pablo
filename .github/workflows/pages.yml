@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - claude/consultoria-ia-automatizacion-mizn9n
   workflow_dispatch:
 
 permissions:
