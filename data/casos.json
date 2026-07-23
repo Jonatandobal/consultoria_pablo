@@ -1,0 +1,72 @@
+[
+  {
+    "id": "CB-2606",
+    "negocio": "Café Belgrano",
+    "rubro": "Gastronomía",
+    "contacto": "Marina · +54 9 11 5555-1201",
+    "mes": "Junio 2026",
+    "estado": "informe-listo",
+    "recibido": "2026-07-20",
+    "ventas": 12450000,
+    "cmv": 7080000,
+    "gastosComprobante": 2310000,
+    "gastosEfectivo": 1640000,
+    "hallazgos": [
+      { "tipo": "alerta", "texto": "42% de los gastos sin comprobante. Complica el equilibrio fiscal y esconde costos." },
+      { "tipo": "alerta", "texto": "Carga de ventas a mano todas las semanas: ~12 h/mes automatizables." },
+      { "tipo": "info", "texto": "Margen sano, pero no hay control de stock inmovilizado." }
+    ],
+    "notas": "Dueña muy receptiva. Interesada en dejar de cargar ventas a mano."
+  },
+  {
+    "id": "FS-2606",
+    "negocio": "Ferretería San Martín",
+    "rubro": "Comercio / retail",
+    "contacto": "Jorge · +54 9 11 5555-3388",
+    "mes": "Junio 2026",
+    "estado": "en-revision",
+    "recibido": "2026-07-21",
+    "ventas": 8900000,
+    "cmv": 5960000,
+    "gastosComprobante": 1450000,
+    "gastosEfectivo": 720000,
+    "hallazgos": [
+      { "tipo": "alerta", "texto": "Stock inmovilizado alto: mucho capital parado en mercadería de baja rotación." },
+      { "tipo": "info", "texto": "Faltan 3 días de ventas del mes. Pedir a Jorge por WhatsApp." }
+    ],
+    "notas": "Falta info de ventas. Contactar antes de cerrar el informe."
+  },
+  {
+    "id": "PP-2606",
+    "negocio": "Peluquería Paula",
+    "rubro": "Servicios",
+    "contacto": "Paula · +54 9 11 5555-7744",
+    "mes": "Junio 2026",
+    "estado": "nuevo",
+    "recibido": "2026-07-22",
+    "ventas": 3200000,
+    "cmv": 480000,
+    "gastosComprobante": 950000,
+    "gastosEfectivo": 610000,
+    "hallazgos": [],
+    "notas": "Recién entró por la landing. Todavía sin procesar."
+  },
+  {
+    "id": "RL-2605",
+    "negocio": "Rotisería La Esquina",
+    "rubro": "Gastronomía",
+    "contacto": "Daniel · +54 9 11 5555-9012",
+    "mes": "Mayo 2026",
+    "estado": "vendido",
+    "recibido": "2026-06-18",
+    "ventas": 6750000,
+    "cmv": 4320000,
+    "gastosComprobante": 1180000,
+    "gastosEfectivo": 890000,
+    "hallazgos": [
+      { "tipo": "alerta", "texto": "Sin control de mermas. Se estimó 8% de pérdida en insumos." },
+      { "tipo": "info", "texto": "Automatización de cierre de caja implementada. Ahorra ~10 h/mes." }
+    ],
+    "notas": "Cerró automatización de cierre de caja + reportes. Abono mensual activo."
+  }
+]

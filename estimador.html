@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EnLimpio · Estimador de automatización</title>
+<meta name="description" content="Calculá cuántas horas y cuánta plata podés recuperar automatizando los procesos de tu negocio, y qué conviene automatizar primero." />
+<style>
+  :root {
+    --paper:#F2F0E8; --surface:#FBFAF6; --surface-2:#F6F4EC; --ink:#16302A; --ink-soft:#4C5C53;
+    --ink-mute:#7A887E; --line:#E0DCCE; --line-2:#D2CDBB; --brand:#12463A; --brand-ink:#0C2E26;
+    --accent:#1C9268; --accent-deep:#137254; --warm:#B96E22; --pos:#1C9268; --neg:#B84A3C;
+    --shadow:0 1px 2px rgba(20,48,42,.06),0 12px 32px -12px rgba(20,48,42,.22);
+    --shadow-sm:0 1px 2px rgba(20,48,42,.06),0 4px 12px -6px rgba(20,48,42,.16);
+    --radius:16px; --radius-sm:11px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua',Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    --mono:'SF Mono',ui-monospace,'Roboto Mono',Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){ :root{
+    --paper:#0E1A17; --surface:#15241F; --surface-2:#122019; --ink:#ECEFE9; --ink-soft:#A7B7AD;
+    --ink-mute:#788A80; --line:#26362F; --line-2:#324740; --brand:#3FBF93; --brand-ink:#CFEFE2;
+    --accent:#46C88C; --accent-deep:#38B37D; --warm:#E0A455; --pos:#46C88C; --neg:#E0796B;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px -16px rgba(0,0,0,.6);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4),0 6px 16px -8px rgba(0,0,0,.5);
+  }}
+  :root[data-theme="light"]{ --paper:#F2F0E8;--surface:#FBFAF6;--surface-2:#F6F4EC;--ink:#16302A;--ink-soft:#4C5C53;--ink-mute:#7A887E;--line:#E0DCCE;--line-2:#D2CDBB;--brand:#12463A;--brand-ink:#0C2E26;--accent:#1C9268;--accent-deep:#137254;--warm:#B96E22;--pos:#1C9268;--neg:#B84A3C;--shadow:0 1px 2px rgba(20,48,42,.06),0 12px 32px -12px rgba(20,48,42,.22);--shadow-sm:0 1px 2px rgba(20,48,42,.06),0 4px 12px -6px rgba(20,48,42,.16);}
+  :root[data-theme="dark"]{ --paper:#0E1A17;--surface:#15241F;--surface-2:#122019;--ink:#ECEFE9;--ink-soft:#A7B7AD;--ink-mute:#788A80;--line:#26362F;--line-2:#324740;--brand:#3FBF93;--brand-ink:#CFEFE2;--accent:#46C88C;--accent-deep:#38B37D;--warm:#E0A455;--pos:#46C88C;--neg:#E0796B;--shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px -16px rgba(0,0,0,.6);--shadow-sm:0 1px 2px rgba(0,0,0,.4),0 6px 16px -8px rgba(0,0,0,.5);}
+
+  *,*::before,*::after{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.14;margin:0;text-wrap:balance;letter-spacing:-.01em;}
+  .tnum{font-variant-numeric:tabular-nums;}
+  a{color:inherit;}
+  :focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;border-radius:4px;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px;}
+  .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--accent-deep);}
+
+  header.nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px;}
+  .brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;}
+  .badge{width:32px;height:32px;border-radius:9px;background:var(--brand);color:#FBFAF6;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:14px;flex:none;}
+  @media (prefers-color-scheme:dark){.badge{color:#08120F;}} :root[data-theme="dark"] .badge{color:#08120F;} :root[data-theme="light"] .badge{color:#FBFAF6;}
+  .brand-name{font-family:var(--serif);font-weight:600;font-size:19px;} .brand-name b{color:var(--accent-deep);font-weight:600;}
+  .nav-inner a.back{text-decoration:none;color:var(--ink-soft);font-size:14.5px;font-weight:550;}
+  .nav-inner a.back:hover{color:var(--ink);}
+
+  .hd{padding:44px 0 8px;} .hd h1{font-size:clamp(30px,4.6vw,44px);letter-spacing:-.02em;} .hd p{color:var(--ink-soft);font-size:18px;margin-top:14px;max-width:40em;}
+
+  .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:start;padding:32px 0 70px;}
+  @media (max-width:940px){.grid{grid-template-columns:1fr;}}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);}
+  .panel{padding:26px;}
+  .panel h2{font-size:22px;} .panel .hint{color:var(--ink-mute);font-size:14px;margin-top:6px;}
+
+  .field{margin-top:22px;} .field > label{display:block;font-weight:650;font-size:14.5px;margin-bottom:9px;}
+  .row{display:flex;gap:12px;flex-wrap:wrap;}
+  select,input[type="number"]{font:inherit;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line-2);border-radius:10px;padding:11px 13px;transition:border-color .15s,box-shadow .15s;}
+  select:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent);}
+  select{width:100%;} .money-in{position:relative;flex:1;min-width:150px;}
+  .money-in span.pfx{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-mute);font-size:15px;}
+  .money-in input{width:100%;padding-left:26px;}
+
+  .areas{margin-top:14px;display:grid;gap:10px;}
+  .area{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:var(--surface-2);transition:border-color .15s,background .15s;}
+  .area.on{border-color:color-mix(in srgb,var(--accent) 55%,transparent);background:color-mix(in srgb,var(--accent) 7%,var(--surface));}
+  .area-top{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;}
+  .area-top input{width:19px;height:19px;accent-color:var(--accent);flex:none;cursor:pointer;}
+  .area-ic{width:30px;height:30px;border-radius:8px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;font-size:16px;flex:none;}
+  .area-name{font-weight:600;font-size:15px;flex:1;} .area-name small{display:block;font-weight:450;color:var(--ink-mute);font-size:12.5px;margin-top:1px;}
+  .area-detail{display:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line-2);align-items:center;gap:10px;flex-wrap:wrap;}
+  .area.on .area-detail{display:flex;}
+  .area-detail label{font-size:13.5px;color:var(--ink-soft);}
+  .area-detail input{width:80px;}
+
+  /* Results */
+  .results{position:sticky;top:84px;}
+  .headline{background:var(--brand);border-radius:var(--radius);padding:24px 24px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .headline .rib{position:absolute;inset:0;opacity:.5;pointer-events:none;background-image:repeating-linear-gradient(90deg,transparent 0 60px,color-mix(in srgb,#FBFAF6 8%,transparent) 60px 61px);}
+  .headline .lab{color:color-mix(in srgb,#FBFAF6 72%,transparent);font-size:12.5px;font-weight:650;text-transform:uppercase;letter-spacing:.09em;position:relative;}
+  .headline .big{color:#FBFAF6;font-family:var(--mono);font-size:40px;font-weight:700;letter-spacing:-.02em;margin-top:4px;position:relative;}
+  .headline .sub{color:color-mix(in srgb,#FBFAF6 80%,transparent);font-size:14px;margin-top:6px;position:relative;}
+  @media (prefers-color-scheme:dark){.headline .big{color:#08120F;} .headline .lab,.headline .sub{color:color-mix(in srgb,#08120F 72%,transparent);}}
+  :root[data-theme="dark"] .headline .big{color:#08120F;} :root[data-theme="dark"] .headline .lab,:root[data-theme="dark"] .headline .sub{color:color-mix(in srgb,#08120F 72%,transparent);}
+  :root[data-theme="light"] .headline .big{color:#FBFAF6;} :root[data-theme="light"] .headline .lab,:root[data-theme="light"] .headline .sub{color:color-mix(in srgb,#FBFAF6 78%,transparent);}
+
+  .mini{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+  .mini .m{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px;box-shadow:var(--shadow-sm);}
+  .mini .m .mv{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.02em;} .mini .m .ml{font-size:12px;color:var(--ink-mute);margin-top:2px;text-transform:uppercase;letter-spacing:.04em;}
+
+  .road{margin-top:16px;} .road h3{font-size:17px;margin-bottom:4px;} .road .rp{color:var(--ink-mute);font-size:13px;margin-bottom:12px;}
+  .ritem{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:11px;margin-bottom:8px;background:var(--surface);box-shadow:var(--shadow-sm);}
+  .ritem .ri-ic{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;font-size:15px;flex:none;background:var(--surface-2);border:1px solid var(--line);}
+  .ritem .ri-body{flex:1;min-width:0;} .ritem .ri-name{font-weight:600;font-size:14.5px;} .ritem .ri-meta{font-size:12.5px;color:var(--ink-mute);}
+  .tag{flex:none;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;letter-spacing:.02em;}
+  .tag-quick{background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent-deep);border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);}
+  .tag-proj{background:color-mix(in srgb,var(--warm) 15%,transparent);color:var(--warm);border:1px solid color-mix(in srgb,var(--warm) 30%,transparent);}
+  .empty{color:var(--ink-mute);font-size:14.5px;text-align:center;padding:26px 10px;}
+
+  .cta{margin-top:18px;}
+  .btn{display:inline-flex;width:100%;align-items:center;justify-content:center;gap:.5em;font-weight:650;font-size:15.5px;padding:14px 20px;border-radius:999px;border:1px solid transparent;cursor:pointer;text-decoration:none;background:var(--brand);color:#FBFAF6;box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .2s;}
+  @media (prefers-color-scheme:dark){.btn{color:#08120F;}} :root[data-theme="dark"] .btn{color:#08120F;} :root[data-theme="light"] .btn{color:#FBFAF6;}
+  .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow);}
+  .disclaimer{color:var(--ink-mute);font-size:12px;margin-top:12px;text-align:center;line-height:1.5;}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><span class="badge">EL</span><span class="brand-name">En<b>Limpio</b></span></a>
+    <a class="back" href="index.html">← Volver al inicio</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hd">
+    <span class="eyebrow">Estimador de automatización</span>
+    <h1>¿Cuánto te está costando hacerlo a mano?</h1>
+    <p>Marcá los procesos que hoy hacés a mano y cuántas horas les dedicás. Te decimos cuánto podés recuperar por mes y qué conviene automatizar primero.</p>
+  </div>
+
+  <div class="grid">
+    <!-- INPUTS -->
+    <div class="card panel">
+      <h2>Tu operación hoy</h2>
+      <p class="hint">Estimaciones rápidas: no necesitás datos exactos.</p>
+
+      <div class="field">
+        <label for="rubro">Rubro de tu negocio</label>
+        <select id="rubro">
+          <option value="gastro">Gastronomía (bar, café, restaurante)</option>
+          <option value="retail">Comercio / retail (local, ferretería, kiosco)</option>
+          <option value="servicios">Servicios (estudio, clínica, estética)</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="valorHora">¿Cuánto vale una hora de tu equipo? (aprox.)</label>
+        <div class="row">
+          <div class="money-in"><span class="pfx">$</span><input id="valorHora" type="number" min="0" step="500" value="6000" /></div>
+        </div>
+        <p class="hint">El costo por hora de quien hoy hace estas tareas (vos, un empleado, el contador).</p>
+      </div>
+
+      <div class="field">
+        <label>¿Qué procesos hacés a mano? Marcá y estimá las horas por semana.</label>
+        <div class="areas" id="areas"></div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results">
+      <div class="headline">
+        <div class="rib"></div>
+        <div class="lab">Podés recuperar por año</div>
+        <div class="big tnum" id="rYear">$0</div>
+        <div class="sub" id="rYearSub">Marcá procesos para ver el estimado</div>
+      </div>
+      <div class="mini">
+        <div class="m"><div class="mv tnum" id="rHours">0 h</div><div class="ml">Horas / mes</div></div>
+        <div class="m"><div class="mv tnum" id="rMonth">$0</div><div class="ml">Ahorro / mes</div></div>
+      </div>
+
+      <div class="road card panel" style="padding:20px;">
+        <h3>Por dónde empezar</h3>
+        <p class="rp">Ordenado por impacto y esfuerzo de implementación.</p>
+        <div id="roadmap"><div class="empty">Elegí al menos un proceso para ver tu hoja de ruta.</div></div>
+
+        <a class="btn cta" id="waBtn" href="#" target="_blank" rel="noopener">Quiero automatizar esto →</a>
+        <p class="disclaimer">Estimación orientativa según valores típicos de pymes. El plan real surge del diagnóstico con Pablo.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ====== CONFIG ====== */
+  const WHATSAPP = "5491100000000"; // ← WhatsApp real de Pablo
+  const WEEKS_PER_MONTH = 4.33;
+
+  /* Cada área: horas típicas/semana por defecto, % automatizable, esfuerzo(1 bajo–3 alto) */
+  const AREAS = [
+    { id:"ventas",   icon:"🧾", name:"Carga de ventas / facturación", desc:"Pasar tickets, emitir facturas, cargar el sistema", def:4,  factor:.85, effort:1 },
+    { id:"gastos",   icon:"💵", name:"Control de gastos y comprobantes", desc:"Juntar facturas, clasificar, cargar gastos", def:3,  factor:.75, effort:1 },
+    { id:"concilia", icon:"🏦", name:"Conciliación bancaria", desc:"Cruzar movimientos del banco con tu registro", def:3,  factor:.80, effort:2 },
+    { id:"stock",    icon:"📦", name:"Stock / inventario", desc:"Contar, reponer, controlar faltantes", def:4,  factor:.65, effort:2 },
+    { id:"cobranzas",icon:"📲", name:"Cobranzas y seguimiento de pagos", desc:"Perseguir pagos, recordar vencimientos", def:2,  factor:.80, effort:2 },
+    { id:"reportes", icon:"📊", name:"Reportes y cierre mensual", desc:"Armar planillas, calcular resultados a mano", def:3,  factor:.90, effort:1 },
+  ];
+
+  const fmtMoney = n => new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(Math.round(n));
+  const fmtHours = n => (Math.round(n*10)/10).toLocaleString('es-AR') + " h";
+
+  // Ajuste por rubro (multiplica horas por defecto para reflejar intensidad del proceso)
+  const RUBRO_MULT = {
+    gastro:    { ventas:1.3, stock:1.2, gastos:1.2 },
+    retail:    { stock:1.4, ventas:1.1 },
+    servicios: { cobranzas:1.3, ventas:.8, stock:.4 },
+    otro:      {}
+  };
+
+  const areasEl = document.getElementById("areas");
+  AREAS.forEach(a => {
+    const el = document.createElement("div");
+    el.className = "area"; el.dataset.id = a.id;
+    el.innerHTML = `
+      <label class="area-top">
+        <input type="checkbox" data-check />
+        <span class="area-ic">${a.icon}</span>
+        <span class="area-name">${a.name}<small>${a.desc}</small></span>
+      </label>
+      <div class="area-detail">
+        <label>Horas por semana:</label>
+        <input type="number" min="0" step="0.5" value="${a.def}" data-hours />
+      </div>`;
+    areasEl.appendChild(el);
+  });
+
+  const $ = s => document.querySelector(s);
+  const state = () => ({ rubro: $("#rubro").value, valorHora: +$("#valorHora").value || 0 });
+
+  function recompute(){
+    const { rubro, valorHora } = state();
+    const mult = RUBRO_MULT[rubro] || {};
+    let totalHours = 0, totalSave = 0;
+    const picked = [];
+
+    document.querySelectorAll(".area").forEach(el => {
+      const id = el.dataset.id;
+      const cfg = AREAS.find(a => a.id === id);
+      const on = el.querySelector("[data-check]").checked;
+      el.classList.toggle("on", on);
+      if(!on) return;
+      const hoursWk = +el.querySelector("[data-hours]").value || 0;
+      const m = mult[id] || 1;
+      const monthHoursNow = hoursWk * WEEKS_PER_MONTH * m;
+      const hoursSaved = monthHoursNow * cfg.factor;
+      const saved = hoursSaved * valorHora;
+      totalHours += hoursSaved; totalSave += saved;
+      picked.push({ ...cfg, hoursSaved, saved });
+    });
+
+    $("#rHours").textContent = fmtHours(totalHours);
+    $("#rMonth").textContent = fmtMoney(totalSave);
+    $("#rYear").textContent  = fmtMoney(totalSave * 12);
+    $("#rYearSub").textContent = picked.length
+      ? `≈ ${fmtHours(totalHours*12)} de trabajo manual por año`
+      : "Marcá procesos para ver el estimado";
+
+    // Roadmap: impacto = ahorro; quick win si esfuerzo bajo
+    const road = document.getElementById("roadmap");
+    if(!picked.length){
+      road.innerHTML = `<div class="empty">Elegí al menos un proceso para ver tu hoja de ruta.</div>`;
+    } else {
+      picked.sort((a,b) => (a.effort - b.effort) || (b.saved - a.saved));
+      road.innerHTML = picked.map((p,i) => {
+        const quick = p.effort <= 1;
+        return `<div class="ritem">
+          <span class="ri-ic">${p.icon}</span>
+          <div class="ri-body">
+            <div class="ri-name">${i+1}. ${p.name}</div>
+            <div class="ri-meta">${fmtHours(p.hoursSaved)}/mes · ${fmtMoney(p.saved)}/mes</div>
+          </div>
+          <span class="tag ${quick?'tag-quick':'tag-proj'}">${quick?'Quick win':'Proyecto'}</span>
+        </div>`;
+      }).join("");
+    }
+
+    // WhatsApp con resumen
+    const msg = picked.length
+      ? `¡Hola! Usé el estimador de EnLimpio. Podría recuperar ~${fmtHours(totalHours)}/mes (${fmtMoney(totalSave)}/mes). Quiero automatizar: ${picked.map(p=>p.name).join(", ")}.`
+      : `¡Hola! Quiero saber qué puedo automatizar en mi negocio.`;
+    $("#waBtn").href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  }
+
+  document.addEventListener("input", recompute);
+  document.addEventListener("change", recompute);
+
+  // Theme persistence (shared con la landing)
+  const stored = localStorage.getItem("enlimpio-theme");
+  if(stored) document.documentElement.setAttribute("data-theme", stored);
+
+  recompute();
+</script>
+</body>
+</html>
